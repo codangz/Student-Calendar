@@ -23,6 +23,10 @@ app.get('/credentials', (req, res) => {
     res.send('Credentials have been added!');
 })
 
+app.get('/members', (req, res) => {
+  res.send('Team Members: Derek Hoang, Ricardo Garcia, Gaia Dennison, Thongsavik Sirivong')
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
