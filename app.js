@@ -1,6 +1,7 @@
-const express = require('express')
-const app = express()
-const port = 3000
+import chalk from 'chalk';
+import express from 'express';
+const app = express();
+const port = 3000;
 
 var credentials = [];
 
@@ -10,6 +11,13 @@ app.get('/', (req, res) => {
 
 app.get('/demo', (req, res) => {
   res.send('This is a nodejs demo!')
+})
+
+app.get('/terminal', (req, res) => {
+  console.log(chalk.blue('Diverse Terminal Text Styles'));
+  console.log(chalk.magenta('Magneta Text!'));
+  console.log(chalk.red('ERROR!'));
+  console.log(chalk.underline('I am underlined!'));
 })
 
 app.get('/credentials', (req, res) => {
