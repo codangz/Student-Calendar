@@ -35,10 +35,6 @@ app.get('/members', (req, res) => {
   res.send('Team Members: Derek Hoang, Ricardo Garcia, Gaia Dennison, Thongsavik Sirivong')
 })
 
-app.get('/practice', (req, res) => {
-    res.send('This is practice!');
-})
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
