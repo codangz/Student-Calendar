@@ -31,6 +31,11 @@ app.get('/credentials', (req, res) => {
     res.send('Credentials have been added!');
 })
 
+app.get('/underscore', (req, res) => {
+    res.send('Range of 1 - 10 sent to console!');
+    console.log(_.range(10));
+})
+
 app.get('/members', (req, res) => {
   res.send('Team Members: Derek Hoang, Ricardo Garcia, Gaia Dennison, Thongsavik Sirivong')
 })
