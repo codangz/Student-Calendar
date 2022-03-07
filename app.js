@@ -5,8 +5,11 @@ import { MongoClient } from 'mongodb'
 const app = express();
 const port = 3000;
 
+// Assigns the MongoDB Atlas deployment's string with username and password
 const uri = "mongodb+srv://codangz:817CFzsA3jrStC8X@codangzcluster.2xscz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 const client = new MongoClient(uri);
+
+// Connects to the cloud cluster with MongoDB Atlas client
 async function run() {
   try {
     await client.connect();
