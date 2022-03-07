@@ -1,8 +1,23 @@
-import {compareAsc, format} from 'date-fns'
+import { compareAsc, format } from 'date-fns'
 import chalk from 'chalk';
 import express from 'express';
+import { MongoClient } from 'mongodb'
 const app = express();
 const port = 3000;
+
+const uri = "mongodb+srv://codangz:817CFzsA3jrStC8X@codangzcluster.2xscz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+const client = new MongoClient(uri);
+async function run() {
+  try {
+    await client.connect();
+  } catch (e) {
+    console.error(e);
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+run().catch(console.error);
 
 var credentials = [];
 

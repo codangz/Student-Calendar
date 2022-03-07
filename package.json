@@ -18,6 +18,7 @@
     "date-fns": "^2.28.0",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.4.1",
     "mongoose": "^6.2.4",
     "underscore": "^1.13.2"
   }
