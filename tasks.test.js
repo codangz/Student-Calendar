@@ -1,4 +1,4 @@
-const validateDate = require('./tasks');
+const { validateDate, isDate } = require('./tasks');
 
 test('1987-02-11 is before 1989-07-10', () => {
   expect(validateDate(new Date(1987, 1, 11), new Date(1989, 6, 10))).toBe(true)

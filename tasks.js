@@ -2,4 +2,8 @@ function validateDate(start, end) {
    return(start.getTime() <= end.getTime());
 }
 
-module.exports = validateDate;
+function isDate(date) {
+    return (date instanceof Date && isFinite(date));
+}
+
+module.exports = { validateDate, isDate };
