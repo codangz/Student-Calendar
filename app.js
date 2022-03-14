@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import express from 'express';
 import { MongoClient } from 'mongodb'
 const app = express();
-const port = 3000;
+const port = 5000;
 
 // Assigns the MongoDB Atlas deployment's string with username and password
 const uri = "mongodb+srv://codangz:817CFzsA3jrStC8X@codangzcluster.2xscz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
@@ -25,19 +25,9 @@ run().catch(console.error);
 var credentials = [];
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+
 })
 
-app.get('/demo', (req, res) => {
-  res.send('This is a nodejs demo!')
-})
-
-app.get('/terminal', (req, res) => {
-  console.log(chalk.blue('Diverse Terminal Text Styles'));
-  console.log(chalk.magenta('Magneta Text!'));
-  console.log(chalk.red('ERROR!'));
-  console.log(chalk.underline('I am underlined!'));
-})
 
 app.get('/credentials', (req, res) => {
     var credentialsRecord = {
