@@ -1,7 +1,5 @@
-import { compareAsc, format } from 'date-fns'
-import chalk from 'chalk';
-import express from 'express';
-import { MongoClient } from 'mongodb'
+const express = require('express');
+const MongoClient = require('mongodb').MongoClient;
 const app = express();
 const port = 5000;
 
@@ -28,7 +26,6 @@ app.get('/', (req, res) => {
   res.send('Welcome to the student calendar.')
 })
 
-
 app.get('/credentials', (req, res) => {
     var credentialsRecord = {
         'FirstName': req.query.firstName,
@@ -40,26 +37,8 @@ app.get('/credentials', (req, res) => {
     res.send('Credentials have been added!');
 })
 
-app.get('/underscore', (req, res) => {
-    res.send('Range of 1 - 10 sent to console!');
-    console.log(_.range(10));
-})
-
 app.get('/members', (req, res) => {
   res.send('Team Members: Derek Hoang, Ricardo Garcia, Gaia Dennison, Thongsavik Sirivong')
-})
-
-app.get('/dateDemo', (req, res) => {
-  format(new Date(2014, 1, 11), 'yyyy-MM-dd')
-
-  const dates = [
-    new Date(1995, 6, 2),
-    new Date(1987, 1, 11),
-    new Date(1989, 6, 10),
-  ]
-  dates.sort(compareAsc)
-
-  res.send(dates)
 })
 
 app.listen(port, () => {

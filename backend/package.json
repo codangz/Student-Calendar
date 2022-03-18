@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Calendar project",
   "main": "app.js",
-  "type": "module",
   "scripts": {
+    "start": "node app.js",
     "test": "jest"
   },
   "author": "",
@@ -12,15 +12,12 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
-    "chalk": "^5.0.0",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
-    "date-fns": "^2.28.0",
     "express": "^4.17.3",
     "jest": "^27.5.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.1",
-    "mongoose": "^6.2.4",
-    "underscore": "^1.13.2"
+    "mongoose": "^6.2.4"
   }
 }
