@@ -25,7 +25,7 @@ run().catch(console.error);
 var credentials = [];
 
 app.get('/', (req, res) => {
-
+  res.send('Welcome to the student calendar.')
 })
 
 
