@@ -4,7 +4,7 @@ import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 //import formatISO9075 from "date-fns/formatISO9075"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday } from "date-fns";
@@ -40,7 +40,7 @@ const CalendarUI = () => {
   const [endTime, setEndTime] = useState(new Date())
 
   //const [newEvents, setNewEvents] = useState({title: "", start: "", end: ""})
-  //const [allEvents, setAllEvents] = useState(myEvents)
+  const [allEvents, setAllEvents] = useState(myEvents)
 
   function handleAddEvent() {
     for (let currentDate = toDate(startDate); !isEqual(currentDate,endDate); currentDate = addDays(currentDate, 1)) {
@@ -51,19 +51,15 @@ const CalendarUI = () => {
       (days.fri && isFriday(currentDate)) ||
       (days.sat && isSaturday(currentDate)) ||
       (days.sun && isSunday(currentDate))) {
-        myEvents.push({
+        setAllEvents(currentElements => [...currentElements, {
           title: classTitle,
           start: set(startTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
           end: set(endTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
-        })
-        //console.warn("ClassAdded: ", myEvents)
+        }])
       }
-      //console.warn("CurrentDate: ", currentDate)
     }
-    //setAllEvents([...allEvents, newEvents])
-    //setAllEvents(myEvents)
-    console.warn("Data:\n", myEvents)
   }
+
   return(
     <div>
       <span>
@@ -189,7 +185,7 @@ const CalendarUI = () => {
       <br></br>
       <Calendar
       localizer={localizer}
-      events={myEvents}
+      events={allEvents}
       startAccessor="start"
       endAccessor="end"
       style ={{height : 800, margin : "50px"}} />
