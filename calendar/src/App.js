@@ -8,7 +8,6 @@ function App() {
   return (
     <div className="App">
       <h1>Student Calendar</h1>
-      <h2>Add New Event</h2>
       <Calendar />
     </div>
   );
