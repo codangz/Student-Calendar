@@ -10,7 +10,7 @@ function AddEvent(props) {
     const [endTime, setEndTime] = useState(new Date())
     const [days, setDays] = useState({mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false})
 
-    const [newEvent, setNewEvent] = useState({title: "", start: props.selectedInfo.start, end: props.selectedInfo.start})
+    const [newEvent, setNewEvent] = useState({title: "", start: (!props.isAddClass) ? props.selectedInfo.start : "", end: (!props.isAddClass) ? props.selectedInfo.start : ""})
 
     function handleAddClass() {
         for (let currentDate = toDate(startDate); !isEqual(currentDate,endDate); currentDate = addDays(currentDate, 1)) {
@@ -166,6 +166,7 @@ function AddEvent(props) {
                 onClick={() => {
                     handleAddClass()
                     props.setTrigger(false)
+                    props.setIsAddClass(false)
                 }} >Submit</button>
                 <button onClick={() => {
                         props.setTrigger(false)
