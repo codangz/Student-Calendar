@@ -92,7 +92,7 @@ class App extends Component {
             {currentUser && (
               <li className="nav-item">
                 <Link to={"/user"} className="nav-link">
-                  User
+                  Calendar
                 </Link>
               </li>
             )}
@@ -130,7 +130,6 @@ class App extends Component {
 
         <div className="container mt-3">
           <Switch>
-            <Route exact path={["/", "/home"]} component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
@@ -139,6 +138,7 @@ class App extends Component {
           </Switch>
         </div>
         <Route path="/user" component={BoardUser} />
+        <Route exact path={["/", "/home"]} component={Home} />
 
         { /*<AuthVerify logOut={this.logOut}/> */ }
       </div>

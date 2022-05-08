@@ -7,6 +7,14 @@ label {
   text-align: center;
 }
 
+.imageBorder {
+  border: 5px solid #343a40;
+}
+
+.center {
+text-align: center;
+}
+
 .card-container.card {
   max-width: 350px !important;
   padding: 40px 40px;

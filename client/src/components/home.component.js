@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import UserService from "../services/user.service";
+import preview from './calendar_preview.png';
 
 export default class Home extends Component {
   constructor(props) {
@@ -31,10 +32,15 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="container">
-        <header className="jumbotron">
-          <h3>{this.state.content}</h3>
-        </header>
+      <div class="center">
+        <h1>Welcome to our student calendar!</h1>
+        <br/>
+        <h3>Keep track of your class schedules by generating them on your very own calendar.</h3>
+        <br/>
+        <h5>Don't have an account? <a href={'/register'}>Sign Up</a></h5>
+        <h5>Already have an account? <a href={'/login'}>Log In</a></h5>
+        <br/>
+        <img src={preview} alt="Calendar Preview" className='imageBorder'/>
       </div>
     );
   }
