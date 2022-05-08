@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import AuthService from "./services/auth.service";
 
@@ -92,7 +93,7 @@ class App extends Component {
             {currentUser && (
               <li className="nav-item">
                 <Link to={"/user"} className="nav-link">
-                  User
+                  Calendar
                 </Link>
               </li>
             )}
@@ -139,7 +140,6 @@ class App extends Component {
             <Route path="/admin" component={BoardAdmin} />
           </Switch>
         </div>
-
         { /*<AuthVerify logOut={this.logOut}/> */ }
       </div>
     );
