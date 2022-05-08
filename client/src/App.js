@@ -13,7 +13,7 @@ import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
-
+import "react-big-calendar/lib/css/react-big-calendar.css";
 // import AuthVerify from "./common/auth-verify";
 import EventBus from "./common/EventBus";
 
@@ -39,7 +39,7 @@ class App extends Component {
         showAdminBoard: user.roles.includes("ROLE_ADMIN"),
       });
     }
-    
+
     EventBus.on("logout", () => {
       this.logOut();
     });
@@ -131,15 +131,19 @@ class App extends Component {
 
         <div className="container mt-3">
           <Switch>
-            <Route exact path={["/", "/home"]} component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
-            <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
           </Switch>
         </div>
+<<<<<<< HEAD
+=======
+        <Route path="/user" component={BoardUser} />
+        <Route exact path={["/", "/home"]} component={Home} />
+
+>>>>>>> 648ac3718a2d70fa2df01c47599b3ddd8f4cd5cf
         { /*<AuthVerify logOut={this.logOut}/> */ }
       </div>
     );
