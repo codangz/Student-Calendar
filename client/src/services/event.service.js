@@ -80,6 +80,8 @@ export class EventService extends React.Component {
 
 }
 
+export default new EventService();
+
 
 // class EventService {
     
