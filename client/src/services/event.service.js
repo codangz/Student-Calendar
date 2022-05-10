@@ -9,7 +9,7 @@ import axios from "axios";
 const API_URL = "http://localhost:8080/api/event/";
 
 class EventService {
-    
+
     createEvent(title, startDate, endDate, startTime, endTime, userId, days) {
         const start = startDate.setTime(startTime.getTime());
         const end = endDate.setTime(endTime.getTime());

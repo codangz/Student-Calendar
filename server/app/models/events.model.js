@@ -11,10 +11,12 @@ const Event = mongoose.model(
     startDate: {
         type: Date,
         default: new Date,
+        alias: 'start',
         required: true
     },
     endDate: {
         type: Date,
+        alias: 'end',
         required: true
     },
     creator: {
