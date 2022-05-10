@@ -11,6 +11,8 @@ import authHeader from './auth-header';
 
 const API_URL = "http://localhost:8080/api/event/";
 
+export const DataContext = React.createContext();
+
 export class EventService extends React.Component {
     constructor(props){
         super(props)
