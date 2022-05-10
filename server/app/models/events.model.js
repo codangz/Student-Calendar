@@ -15,6 +15,7 @@ const Event = mongoose.model(
     },
     endDate: {
         type: Date,
+        default: new Date,
         required: true
     },
     creator: {

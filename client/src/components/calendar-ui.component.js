@@ -34,11 +34,13 @@ useEffect(() => {
 }) 
 */
 
-const CalendarUI = () => {
+const CalendarUI = (props) => {
   const [popupAlert, setPopupAlert] = useState(false)
   const [isAddClass, setIsAddClass] = useState(false)
   const [selectedInfo, setSelectedInfo] = useState(null)
   const [allEvents, setAllEvents] = useState(myEvents)
+
+  console.warn("myEvents: ", myEvents)
 
   const onSelectSlot = useCallback((slotInfo) => {
     setSelectedInfo(slotInfo)
@@ -56,7 +58,7 @@ const CalendarUI = () => {
       </div>
       <Calendar
       localizer={localizer}
-      events={allEvents}
+      events={props.events}
       startAccessor="start"
       endAccessor="end"
       style ={{height : 1000, margin : "50px"}}
@@ -70,6 +72,7 @@ const CalendarUI = () => {
       isAddClass={isAddClass}
       setIsAddClass={setIsAddClass}
       selectedInfo={selectedInfo}
+      user={props.user}
       />
     </div>
   )

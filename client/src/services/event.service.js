@@ -5,18 +5,25 @@
 // app.delete('/api/event/:userId/:eventId', eventController.delete);
 
 import axios from "axios";
+import { set, getYear, getMonth, getDate } from "date-fns";
 
 const API_URL = "http://localhost:8080/api/event/";
 
 class EventService {
     
-    createEvent(title, startDate, endDate, startTime, endTime, userId, days) {
-        const start = startDate.setTime(startTime.getTime());
-        const end = endDate.setTime(endTime.getTime());
-        const r = (await axios.get(API_URL + userId, { title, start, end, days })).data;
+    async createEvent(title, startDate, endDate, startTime, endTime, userId, days) {
+        const start = ((startTime) ? set(startTime, {year: getYear(startDate), month: getMonth(startDate), date: getDate(startDate)}) : startDate).toISOString();
+        const end = ((endTime) ? set(endTime, {year: getYear(endDate), month: getMonth(endDate), date: getDate(endDate)}) : endDate).toISOString();
+        console.warn("start: ", start, "\nend: ", end)
+        const r = (await axios.post(API_URL + userId, { title, start, end, userId, days })).data;
         return r; 
     }
     // ... all the other requests 
+
+    async getEvents(userId) {
+        const r = (await axios.get(API_URL + userId)).data;
+        return r;
+    }
 }
-export default EventService;
+export default new EventService();
 

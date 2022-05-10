@@ -12,7 +12,9 @@ function SelectedPopup(props) {
                 setTrigger={props.setTrigger}
                 isAddClass={props.isAddClass}
                 setIsAddClass={props.setIsAddClass}
-                selectedInfo={props.selectedInfo}/>
+                selectedInfo={props.selectedInfo}
+                user={props.user}
+                />
                 {props.children}
             </div>
         </div>
