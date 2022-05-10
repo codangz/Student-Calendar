@@ -1,18 +1,76 @@
 import React, { useState } from "react";
-import { isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, addDays, set, getYear, getMonth, getDate, isEqual, toDate } from "date-fns";
+//import { isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, addDays, set, getYear, getMonth, getDate, isEqual, toDate } from "date-fns";
 import DatePicker from "react-datepicker";
+import EventService from "../../services/event.service";
 
-function AddEvent(props) {
+class AddEvent extends React.Component {
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            title: "",
+            startDate: "",
+            endDate: "",
+            startTime: "",
+            endTime: "",
+            days: {mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false},
+            isTimeInvalid: false, invalidMessage: '',
+            newEvent : {
+                title: "",
+                start: (!this.props.isAddClass) ? this.props.selectedInfo.start : "",
+                end: (!this.props.isAddClass) ? this.props.selectedInfo.start : ""
+            }
+        }
+
+        this.reset = this.reset.bind(this)
+        this.handleChange = this.handleChange.bind(this)
+        //this.handleAddClass = this.handleAddClass.bind(this)
+        this.handleAddEvent = this.handleAddEvent.bind(this)
+    }
+
+    reset() {
+        this.setState({
+            title: "",
+            startDate: "",
+            endDate: "",
+            startTime: "",
+            endTime: "",
+            days: {mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false},
+            newEvent : {
+                title: "",
+                start: (!this.props.isAddClass) ? this.props.selectedInfo.start : "",
+                end: (!this.props.isAddClass) ? this.props.selectedInfo.start : ""
+            }
+        })
+    }
+
+    /*
+    handleClose() {
+
+    }
+    */
+
+    
+    handleChange(e) {
+        const {name, value} = e.target
+        this.setState({ [name]: value })
+    }
+
+
+    /*
     const [name, setName] = useState("")
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
     const [startTime, setStartTime] = useState(new Date())
     const [endTime, setEndTime] = useState(new Date())
     const [days, setDays] = useState({mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false})
+    */
 
-    const [newEvent, setNewEvent] = useState({title: "", start: (!props.isAddClass) ? props.selectedInfo.start : "", end: (!props.isAddClass) ? props.selectedInfo.start : ""})
+    //const [newEvent, setNewEvent] = useState({title: "", start: (!props.isAddClass) ? props.selectedInfo.start : "", end: (!props.isAddClass) ? props.selectedInfo.start : ""})
 
-    function handleAddClass() {
+    /*
+    async handleAddClass() {
         for (let currentDate = toDate(startDate); !isEqual(currentDate,endDate); currentDate = addDays(currentDate, 1)) {
             if ((days.mon && isMonday(currentDate)) ||
             (days.tue && isTuesday(currentDate)) ||
@@ -22,7 +80,7 @@ function AddEvent(props) {
             (days.sat && isSaturday(currentDate)) ||
             (days.sun && isSunday(currentDate))) {
                 props.setAllEvents(currentElements => [...currentElements, {
-                    title: name,
+                    title: title,
                     start: set(startTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
                     end: set(endTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
                 }])
@@ -30,22 +88,63 @@ function AddEvent(props) {
         }
         console.warn("Class Added")
     }
+    */
 
-    function handleAddEvent() {
-        props.setAllEvents((currentEvents => [...currentEvents, newEvent]))
-        console.warn("Event Added")
+    async handleAddEvent() {
+
+        const start = new Date(this.state.startDate, this.state.startTime);
+        const end = new Date(this.state.endDate, this.state.endTime);
+
+        if(start > end){
+            this.setState({ isTimeInvalid: true, invalidMessage: 'The event can\'t end before it starts.' })
+        }
+        
+        else if(end - start < 5*60*1000){
+            this.setState({ isTimeInvalid: true, invalidMessage: 'The event\'s minimum duration is 5 minutes.' })
+        }
+
+        else {
+            const r = (await EventService.createEvent(this.state.title, start, end, this.props.user.id, null));
+
+            if (r.status === 200) {
+                alert(`The event "${r.title}" was successfully created!`)
+                console.warn("The event succesfully created: ", this.state.newEvent)
+                this.handleClose()
+            }
+            else {
+                console.warn("Failed to create event.", this.state.newEvent)
+                this.setState({ isTimeInvalid: true, invalidMessage: r.message })
+
+                // conflict
+                if(r.status === 409){
+                    alert( r.message.replace(/^(.+?with\s).+$/, '$1') + 'the following events: \n' + r.overlaps.reduce(
+                        (acc, cur) => ( 
+                            acc + `\n  * ${cur.title} | ${this.context.getDate(new Date(cur.startDate), new Date(cur.endDate))}`
+                        ), ''
+                    ))
+                }
+                
+                else if(r.status === 404){
+                    alert('An error occured.')
+                }
+            }
+
+            //props.setAllEvents((currentEvents => [...currentEvents, newEvent]))
+            //console.warn("Event Added")
+        }
     }
 
-    return (props.isAddClass) ? (
+    render = () => (this.props.isAddClass) ? (
         <div>
             <h2>Add Class</h2>
             <div>
                 <input
                 type="text"
+                name="title"
                 placeholder="Class Title"
                 style={{ width: "95%"}}
-                selected={name}
-                onChange={(e) => setName(e.target.value)}
+                selected={this.state.title}
+                onChange={this.handleChange}
                 />
             </div>
             <br></br>
@@ -56,19 +155,21 @@ function AddEvent(props) {
                             <td align="right">Start Date</td>
                             <td>
                                 <DatePicker
+                                name="startDate"
                                 placeholderText="Start Date"
                                 style={{ mariginRight: "10px"}}
-                                selected={startDate}
-                                onChange={(date) => setStartDate(date)}
+                                selected={this.state.startDate}
+                                onChange={this.handleChange}
                                 />
                             </td>
                             <td align="right">End Date</td>
                             <td>
                                 <DatePicker
+                                name="endDate"
                                 placeholderText="End Date"
-                                selected={endDate}
-                                onChange={(date) => setEndDate(date)}
-                                minDate={startDate}
+                                selected={this.state.endDate}
+                                onChange={this.handleChange}
+                                minDate={this.state.startDate}
                                 />
                             </td>
                         </tr>
@@ -76,26 +177,28 @@ function AddEvent(props) {
                             <td align="right">From</td>
                             <td>
                                 <DatePicker
+                                name="startTime"
                                 style={{ mariginRight: "10px"}}
                                 showTimeSelect
                                 showTimeSelectOnly
                                 timeIntervals={15}
                                 dateFormat="h:mm aa"
                                 placeholderText="Start Time"
-                                selected={startTime}
-                                onChange={(time) => setStartTime(time)}
+                                selected={this.state.startTime}
+                                onChange={this.handleChange}
                                 />
                             </td>
                             <td align="right">To</td>
                             <td>
                                 <DatePicker
+                                name="endTime"
                                 showTimeSelect
                                 showTimeSelectOnly
                                 timeIntervals={15}
                                 dateFormat="h:mm aa"
                                 placeholderText="End Time"
-                                selected={endTime}
-                                onChange={(time) => setEndTime(time)}
+                                selected={this.state.endTime}
+                                onChange={this.handleChange}
                                 />
                             </td>
                         </tr>
@@ -109,51 +212,51 @@ function AddEvent(props) {
                 <div>
                     <span style={{marginRight: "5px"}}>
                         <label>Mo</label>
-                        <input type="checkbox" name="Monday" id="Monday"
-                        selected={days.mon}
-                        onChange={(day) => setDays({...days, mon: day.target.checked})}
+                        <input type="checkbox" name="mon" id="day"
+                        selected={this.state.days.mon}
+                        onChange={this.handleChange}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Tu</label>
-                        <input type="checkbox" name="Tuesday" id="Tuesday"
-                        selected={days.tue}
-                        onChange={(day) => setDays({...days, tue: day.target.checked})}
+                        <input type="checkbox" name="tue" id="day"
+                        selected={this.state.days.tue}
+                        onChange={this.handleChange}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>We</label>
-                        <input type="checkbox" name="Wednesday" id="Wednesday"
-                        selected={days.wed}
-                        onChange={(day) => setDays({...days, wed: day.target.checked})}
+                        <input type="checkbox" name="wed" id="day"
+                        selected={this.state.days.wed}
+                        onChange={this.handleChange}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Th</label>
-                        <input type="checkbox" name="Thursday" id="Thursday"
-                        selected={days.thu}
-                        onChange={(day) => setDays({...days, thu: day.target.checked})}
+                        <input type="checkbox" name="thu" id="day"
+                        selected={this.state.days.thu}
+                        onChange={this.handleChange}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Fr</label>
-                        <input type="checkbox" name="Friday" id="Friday"
-                        selected={days.fri}
-                        onChange={(day) => setDays({...days, fri: day.target.checked})}
+                        <input type="checkbox" name="fri" id="day"
+                        selected={this.state.days.fri}
+                        onChange={this.handleChange}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Sa</label>
-                        <input type="checkbox" name="Saturday" id="Saturday"
-                        selected={days.sat}
-                        onChange={(day) => setDays({...days, sat: day.target.checked})}
+                        <input type="checkbox" name="sat" id="day"
+                        selected={this.state.days.sat}
+                        onChange={this.handleChange}
                         />
                     </span>
                     <span>
                         <label>Su</label>
-                        <input type="checkbox" name="Sunday" id="Sunday"
-                        selected={days.sun}
-                        onChange={(day) => setDays({...days, sun: day.target.checked})}
+                        <input type="checkbox" name="sun" id="day"
+                        selected={this.state.days.sun}
+                        onChange={this.handleChange}
                         />
                     </span>
                 </div>
@@ -164,16 +267,16 @@ function AddEvent(props) {
                 <button
                 style={{marginRight: "50px"}}
                 onClick={() => {
-                    handleAddClass()
-                    props.setTrigger(false)
-                    props.setIsAddClass(false)
+                    //this.handleAddClass()
+                    this.props.setTrigger(false)
+                    this.props.setIsAddClass(false)
                 }} >Submit</button>
                 <button onClick={() => {
-                        props.setTrigger(false)
-                        props.setIsAddClass(false)
+                        this.props.setTrigger(false)
+                        this.props.setIsAddClass(false)
                     }
                 }>Cancel</button>
-                {props.children}
+                {this.props.children}
             </div>
         </div>
     ) : (
@@ -184,8 +287,8 @@ function AddEvent(props) {
                 type="text"
                 placeholder="Event Name"
                 style={{ width: "95%"}}
-                selected={newEvent.title}
-                onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
+                selected={this.state.title}
+                onChange={(e) => this.setState({title: e.target.value})}
                 />
             </div>
             <br></br>
@@ -198,17 +301,17 @@ function AddEvent(props) {
                                 <DatePicker
                                 placeholderText="Start Date"
                                 style={{ mariginRight: "10px"}}
-                                selected={newEvent.start}
-                                onChange={(date) => setNewEvent({...newEvent, start: date})}
+                                selected={this.state.startDate}
+                                onChange={(date) => this.setState({startDate: date})}
                                 />
                             </td>
                             <td align="right">End Date</td>
                             <td>
                                 <DatePicker
                                 placeholderText="End Date"
-                                selected={newEvent.end}
-                                onChange={(date) => setNewEvent({...newEvent, end: date})}
-                                minDate={newEvent.start}
+                                selected={this.state.endDate}
+                                onChange={(date) => this.setState({endDate: date})}
+                                minDate={this.state.startDate}
                                 />
                             </td>
                         </tr>
@@ -222,8 +325,8 @@ function AddEvent(props) {
                                 timeIntervals={15}
                                 dateFormat="h:mm aa"
                                 placeholderText="Start Time"
-                                selected={newEvent.start}
-                                onChange={(time) => setNewEvent({...newEvent, start: time})}
+                                selected={this.state.startTime}
+                                onChange={(time) => this.setState({startTime: time})}
                                 />
                             </td>
                             <td align="right">To</td>
@@ -234,8 +337,8 @@ function AddEvent(props) {
                                 timeIntervals={15}
                                 dateFormat="h:mm aa"
                                 placeholderText="End Time"
-                                selected={newEvent.end}
-                                onChange={(time) => setNewEvent({...newEvent, end: time})}
+                                selected={this.state.endTime}
+                                onChange={(time) => this.setState({endTime: time})}
                                 />
                             </td>
                         </tr>
@@ -248,14 +351,16 @@ function AddEvent(props) {
                 <button
                 style={{marginRight: "50px"}}
                 onClick={() => {
-                    handleAddEvent()
-                    props.setTrigger(false)
+                    this.handleAddEvent()
+                    this.props.setTrigger(false)
+                    this.reset()
                 }}>Submit</button>
                 <button onClick={() => {
-                        props.setTrigger(false)
+                        this.props.setTrigger(false)
+                        this.reset()
                     }
                 }>Cancel</button>
-                {props.children}
+                {this.props.children}
             </div>
         </div>
     );

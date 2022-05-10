@@ -138,16 +138,15 @@ class App extends Component {
             <Route path="/admin" component={BoardAdmin} />
           </Switch>
         </div>
-<<<<<<< HEAD
-=======
         <Route path="/user" component={BoardUser} />
         <Route exact path={["/", "/home"]} component={Home} />
 
->>>>>>> 648ac3718a2d70fa2df01c47599b3ddd8f4cd5cf
         { /*<AuthVerify logOut={this.logOut}/> */ }
       </div>
     );
   }
 }
+
+
 
 export default App;

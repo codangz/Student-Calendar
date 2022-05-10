@@ -1,5 +1,5 @@
 const eventController = require('../controllers/event.controller');
-// const { authJwt } = require("../middlewares");
+const { authJwt } = require("../middlewares");
 
 module.exports = function(app) {
     app.use(function(req, res, next) {
@@ -10,7 +10,7 @@ module.exports = function(app) {
       next();
     });
   
-    app.get('/api/event/:userId', eventController.find);
+    app.get('/api/event/:userId', [authJwt.verifyToken], eventController.find);
     app.post('/api/event/:userId', eventController.create);
     app.put('/api/event/:userId/:eventId', eventController.update);
     app.delete('/api/event/:userId/:eventId', eventController.delete);

@@ -6,6 +6,7 @@ import Calendar from "./calendar-ui.component";
 //
 import { Redirect } from "react-router-dom";
 import AuthService from "../services/auth.service";
+import EventService from "../services/event.service";
 //
 export default class BoardUser extends Component {
   constructor(props) {
@@ -16,7 +17,8 @@ export default class BoardUser extends Component {
       //
       redirect: null,
       userReady: false,
-      currentUser: { username: "" }
+      currentUser: { username: "" },
+      events: []
       //
     };
   }
@@ -24,9 +26,23 @@ export default class BoardUser extends Component {
   componentDidMount() {
     //
     const currentUser = AuthService.getCurrentUser();
-
     if (!currentUser) this.setState({ redirect: "/home" });
     this.setState({ currentUser: currentUser, userReady: true })
+
+    EventService.getEvents(currentUser.id).then(
+      (result) => {
+        const calendarEvents = []
+        result.events.forEach(element => {
+          calendarEvents.push({
+            title: element.title,
+            start: new Date(element.startDate),
+            end: new Date(element.endDate)
+          })
+        });
+        this.setState({events: calendarEvents})
+      }
+    );
+
     //
     UserService.getUserBoard().then(
       response => {
@@ -58,13 +74,14 @@ export default class BoardUser extends Component {
     }
     
     const { currentUser } = this.state;
+    //const { events } = this.state;
 
-    //console.warn(currentUser)
+    console.warn("events: ", this.state.events)
     //
     return (
       <div className="App">
         <h1>Student Calendar</h1>
-        <Calendar user={currentUser} />
+        <Calendar events={this.state.events} user={currentUser}/>
       </div>
     );
   }
