@@ -6,14 +6,12 @@
 
 import axios from "axios";
 import React from "react";
-import authHeader from './auth-header';
-// import { set, getYear, getMonth, getDate } from "date-fns";
 
 const API_URL = "http://localhost:8080/api/event/";
 
 // export const DataContext = React.createContext();
 
-// export default class EventService extends React.Component {
+// export class EventService extends React.Component {
 //     constructor(props){
 //         super(props)
 
@@ -41,8 +39,8 @@ const API_URL = "http://localhost:8080/api/event/";
 //         return r; 
 //     }
 
-//     async getEvents(userId) {
-//         const r = (await axios.get(API_URL + userId, { headers: authHeader() })).data;
+//     async getEvents() {
+//         const r = (await axios.get(API_URL + this.userId, { headers: authHeader() })).data;
 
 //         if(r.status === 200 || r.status === 404){
 //             this.setState({events: r.events.map(e => {
@@ -80,6 +78,8 @@ const API_URL = "http://localhost:8080/api/event/";
 // }
 
 
+
+
 class EventService {
     
     async createEvent(title, start, end, userId, days) {
@@ -91,7 +91,7 @@ class EventService {
     }
 
     async getEvents(userId) {
-        const r = (await axios.get(API_URL + userId, { headers: authHeader() })).data;
+        const r = (await axios.get(API_URL + userId)).data;
         return r;
     }
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 //import { isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, addDays, set, getYear, getMonth, getDate, isEqual, toDate } from "date-fns";
 import DatePicker from "react-datepicker";
-import EventService from "../../services/event.service";
+import { EventService } from "../../services/event.service";
 
 class AddEvent extends React.Component {
 
