@@ -13,7 +13,7 @@ const API_URL = "http://localhost:8080/api/event/";
 
 export const DataContext = React.createContext();
 
-class EventService extends React.Component {
+export class EventService extends React.Component {
     constructor(props){
         super(props)
 
@@ -79,8 +79,6 @@ class EventService extends React.Component {
     }
 
 }
-
-export default new EventService();
 
 
 // class EventService {
