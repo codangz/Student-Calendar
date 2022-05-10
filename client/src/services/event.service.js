@@ -13,7 +13,7 @@ const API_URL = "http://localhost:8080/api/event/";
 
 export const DataContext = React.createContext();
 
-export class EventService extends React.Component {
+class EventService extends React.Component {
     constructor(props){
         super(props)
 
@@ -29,7 +29,6 @@ export class EventService extends React.Component {
     }
 
     async createEvent(title, start, end, userId, days) {
-        const start = 
         // const start = ((startTime) ? set(startTime, {year: getYear(startDate), month: getMonth(startDate), date: getDate(startDate)}) : startDate).toISOString();
         // const end = ((endTime) ? set(endTime, {year: getYear(endDate), month: getMonth(endDate), date: getDate(endDate)}) : endDate).toISOString();
         console.warn("start: ", start, "\nend: ", end)
@@ -80,6 +79,7 @@ export class EventService extends React.Component {
 
 }
 
+export default new EventService();
 
 // class EventService {
     
