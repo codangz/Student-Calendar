@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-//import { isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, addDays, set, getYear, getMonth, getDate, isEqual, toDate } from "date-fns";
+import React from "react";
+import { isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, addDays, set, getYear, getMonth, getDate, isEqual, toDate } from "date-fns";
+//import { set, getYear, getMonth, getDate, parse } from "date-fns";
 import DatePicker from "react-datepicker";
 import EventService from "../../services/event.service";
 
@@ -10,22 +11,24 @@ class AddEvent extends React.Component {
 
         this.state = {
             title: "",
-            startDate: "",
-            endDate: "",
-            startTime: "",
-            endTime: "",
+            startDate: new Date(),
+            endDate: new Date(),
+            startTime: new Date(),
+            endTime: new Date(),
             days: {mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false},
-            isTimeInvalid: false, invalidMessage: '',
+            isTimeInvalid: false, invalidMessage: ''
+            /*
             newEvent : {
                 title: "",
                 start: (!this.props.isAddClass) ? this.props.selectedInfo.start : "",
                 end: (!this.props.isAddClass) ? this.props.selectedInfo.start : ""
             }
+            */
         }
 
         this.reset = this.reset.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        //this.handleAddClass = this.handleAddClass.bind(this)
+        this.handleClose = this.handleClose.bind(this)
+        this.handleAddClass = this.handleAddClass.bind(this)
         this.handleAddEvent = this.handleAddEvent.bind(this)
         this.reset = this.reset.bind(this)
 
@@ -38,46 +41,28 @@ class AddEvent extends React.Component {
             endDate: "",
             startTime: "",
             endTime: "",
-            days: {mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false},
+            days: {mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false}
+            /*
             newEvent : {
                 title: "",
                 start: (!this.props.isAddClass) ? this.props.selectedInfo.start : "",
                 end: (!this.props.isAddClass) ? this.props.selectedInfo.start : ""
             }
+            */
         })
     }
 
-    /*
     handleClose() {
-
-    }
-    */
-
-    
-    handleChange(e) {
-        const {name, value} = e.target
-        
-        this.setState(
-            (name.includes('Date') || name.includes('Time')) 
-            ? { [name]: value } 
-            : { [name]: value, isTimeInvalid: false, invalidMessage: '' }
-        ) 
+        this.reset()
+        this.props.setIsAddClass(false)
+        this.props.setTrigger(false)
     }
 
-
-    /*
-    const [name, setName] = useState("")
-    const [startDate, setStartDate] = useState(new Date())
-    const [endDate, setEndDate] = useState(new Date())
-    const [startTime, setStartTime] = useState(new Date())
-    const [endTime, setEndTime] = useState(new Date())
-    const [days, setDays] = useState({mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false})
-    */
-
-    //const [newEvent, setNewEvent] = useState({title: "", start: (!props.isAddClass) ? props.selectedInfo.start : "", end: (!props.isAddClass) ? props.selectedInfo.start : ""})
-
-    /*
-    async handleAddClass() {
+    // TODO: Fix the add class function
+    handleAddClass() {
+        const { startDate, endDate, days, title, startTime, endTime } = this.state
+        //const temp = this.props.allEvents.map((x) => x)
+        var count = 0
         for (let currentDate = toDate(startDate); !isEqual(currentDate,endDate); currentDate = addDays(currentDate, 1)) {
             if ((days.mon && isMonday(currentDate)) ||
             (days.tue && isTuesday(currentDate)) ||
@@ -86,45 +71,63 @@ class AddEvent extends React.Component {
             (days.fri && isFriday(currentDate)) ||
             (days.sat && isSaturday(currentDate)) ||
             (days.sun && isSunday(currentDate))) {
-                props.setAllEvents(currentElements => [...currentElements, {
+                const start = set(startTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)})
+                const end = set(endTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)})
+                const r = EventService.createEvent(title, start, end, this.props.user.id, null)
+                
+                if (r.status === 200) {
+                    console.warn("The event succesfully created: ")
+                }
+                else {
+                    console.warn("Failed to create event.")
+                }
+
+                count++
+
+                /*
+                temp.push({
                     title: title,
                     start: set(startTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
                     end: set(endTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
-                }])
+                })
+                */
             }
         }
-        console.warn("Class Added")
+        console.log("loop_count: ", count)
+        //console.log("temp: ", temp)
+        //this.props.setAllEvents(temp)
+        //console.warn("Class Added")
+        this.props.setIsSubmitted(true)
+        this.handleClose()
     }
-    */
 
     async handleAddEvent() {
-        const { title, startDate, endDate, startTime, endTime, days, newEvent } = this.state;
+        
+        const { title, startDate, endDate, startTime, endTime } = this.state
 
         const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 
-        startTime.getHours(), startTime.getMinutes(), startTime.getSeconds());
-
+        startTime.getHours(), startTime.getMinutes(), startTime.getSeconds())
         const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 
-        endTime.getHours(), endTime.getMinutes(), endTime.getSeconds());
+        endTime.getHours(), endTime.getMinutes(), endTime.getSeconds())
 
-        if(start > end){
-            this.setState({ isTimeInvalid: true, invalidMessage: 'The event can\'t end before it starts.' })
-        }
-        
-        else if(end - start < 5*60*1000){
-            this.setState({ isTimeInvalid: true, invalidMessage: 'The event\'s minimum duration is 5 minutes.' })
-        }
+        //console.warn("handle_start: ", start, "\nhandle_end: ", end)
 
+        if(start > end) {
+            console.warn('The event can\'t end before it starts.')
+        }
+        else if(end - start < 5*60*1000) {
+            console.warn('The event\'s minimum duration is 5 minutes.')
+        }
         else {
-            const r = (await EventService.createEvent(title, start.toString(), end.toString(), this.props.user.id, null));
-
+            const r = (await EventService.createEvent(title, start, end, this.props.user.id, null))
+    
             if (r.status === 200) {
-                alert(`The event "${r.title}" was successfully created!`)
-                console.warn("The event succesfully created: ", this.state.newEvent)
-                // this.handleClose()
+                //alert(`The event "${r.title}" was successfully created!`)
+                console.warn("The event succesfully created: ")
+                //this.handleClose()
             }
             else {
-                console.warn("Failed to create event.", this.state.newEvent)
-                this.setState({ isTimeInvalid: true, invalidMessage: r.message })
+                console.warn("Failed to create event.")
 
                 // conflict
                 if(r.status === 409){
@@ -139,10 +142,9 @@ class AddEvent extends React.Component {
                     alert('An error occured.')
                 }
             }
-
-            //props.setAllEvents((currentEvents => [...currentEvents, newEvent]))
-            //console.warn("Event Added")
         }
+        this.props.setIsSubmitted(true)
+        this.handleClose()
     }
 
     render = () => (this.props.isAddClass) ? (
@@ -151,11 +153,10 @@ class AddEvent extends React.Component {
             <div>
                 <input
                 type="text"
-                name="title"
                 placeholder="Class Title"
                 style={{ width: "95%"}}
                 selected={this.state.title}
-                onChange={this.handleChange}
+                onChange={(e) => this.setState({title: e.target.value})}
                 />
             </div>
             <br></br>
@@ -166,20 +167,18 @@ class AddEvent extends React.Component {
                             <td align="right" >Start Date</td>
                             <td>
                                 <DatePicker
-                                name="startDate"
                                 placeholderText="Start Date"
                                 style={{mariginRight: "10px"}}
                                 selected={this.state.startDate}
-                                onChange={this.handleChange}
+                                onChange={(date) => this.setState({startDate: date})}
                                 />
                             </td>
                             <td align="right">End Date</td>
                             <td>
                                 <DatePicker
-                                name="endDate"
                                 placeholderText="End Date"
                                 selected={this.state.endDate}
-                                onChange={this.handleChange}
+                                onChange={(date) => this.setState({endDate: date})}
                                 minDate={this.state.startDate}
                                 />
                             </td>
@@ -188,7 +187,6 @@ class AddEvent extends React.Component {
                             <td align="right">From</td>
                             <td>
                                 <DatePicker
-                                name="startTime"
                                 style={{ mariginRight: "10px"}}
                                 showTimeSelect
                                 showTimeSelectOnly
@@ -196,21 +194,19 @@ class AddEvent extends React.Component {
                                 dateFormat="h:mm aa"
                                 placeholderText="Start Time"
                                 selected={this.state.startTime}
-                                onChange={this.handleChange}
+                                onChange={(time) => this.setState({startTime: time})}
                                 />
                             </td>
                             <td align="right">To</td>
                             <td>
                                 <DatePicker
-                                name="endTime"
                                 showTimeSelect
                                 showTimeSelectOnly
                                 timeIntervals={15}
                                 dateFormat="h:mm aa"
                                 placeholderText="End Time"
                                 selected={this.state.endTime}
-                                onChange={this.handleChange}
-                                minTime={this.state.startDate}
+                                onChange={(time) => this.setState({endTime: time})}
                                 />
                             </td>
                         </tr>
@@ -226,49 +222,49 @@ class AddEvent extends React.Component {
                         <label>Mo</label>
                         <input type="checkbox" name="mon" id="day"
                         selected={this.state.days.mon}
-                        onChange={this.handleChange}
+                        onChange={(day) => this.setState({days: {mon: day.target.checked}})}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Tu</label>
                         <input type="checkbox" name="tue" id="day"
                         selected={this.state.days.tue}
-                        onChange={this.handleChange}
+                        onChange={(day) => this.setState({days: {tue: day.target.checked}})}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>We</label>
                         <input type="checkbox" name="wed" id="day"
                         selected={this.state.days.wed}
-                        onChange={this.handleChange}
+                        onChange={(day) => this.setState({days: {wed: day.target.checked}})}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Th</label>
                         <input type="checkbox" name="thu" id="day"
                         selected={this.state.days.thu}
-                        onChange={this.handleChange}
+                        onChange={(day) => this.setState({days: {thu: day.target.checked}})}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Fr</label>
                         <input type="checkbox" name="fri" id="day"
                         selected={this.state.days.fri}
-                        onChange={this.handleChange}
+                        onChange={(day) => this.setState({days: {fri: day.target.checked}})}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Sa</label>
                         <input type="checkbox" name="sat" id="day"
                         selected={this.state.days.sat}
-                        onChange={this.handleChange}
+                        onChange={(day) => this.setState({days: {sat: day.target.checked}})}
                         />
                     </span>
                     <span>
                         <label>Su</label>
                         <input type="checkbox" name="sun" id="day"
                         selected={this.state.days.sun}
-                        onChange={this.handleChange}
+                        onChange={(day) => this.setState({days: {sun: day.target.checked}})}
                         />
                     </span>
                 </div>
@@ -276,18 +272,8 @@ class AddEvent extends React.Component {
             <br></br>
             <br></br>
             <div>
-                <button
-                style={{marginRight: "50px"}}
-                onClick={() => {
-                    //this.handleAddClass()
-                    this.props.setTrigger(false)
-                    this.props.setIsAddClass(false)
-                }} >Submit</button>
-                <button onClick={() => {
-                        this.props.setTrigger(false)
-                        this.props.setIsAddClass(false)
-                    }
-                }>Cancel</button>
+                <button style={{marginRight: "50px"}} onClick={this.handleAddClass} >Submit</button>
+                <button onClick={this.handleClose}>Cancel</button>
                 {this.props.children}
             </div>
         </div>
@@ -297,7 +283,7 @@ class AddEvent extends React.Component {
             <div>
                 <input
                 type="text"
-                placeholder="Event Name"
+                placeholder="Event Title"
                 style={{ width: "95%"}}
                 selected={this.state.title}
                 onChange={(e) => this.setState({title: e.target.value})}
@@ -360,18 +346,8 @@ class AddEvent extends React.Component {
             <br></br>
             <br></br>
             <div>
-                <button
-                style={{marginRight: "50px"}}
-                onClick={() => {
-                    this.handleAddEvent()
-                    this.props.setTrigger(false)
-                    this.reset()
-                }}>Submit</button>
-                <button onClick={() => {
-                        this.props.setTrigger(false)
-                        this.reset()
-                    }
-                }>Cancel</button>
+                <button style={{marginRight: "50px"}} onClick={this.handleAddEvent}>Submit</button>
+                <button onClick={this.handleClose}>Cancel</button>
                 {this.props.children}
             </div>
         </div>
