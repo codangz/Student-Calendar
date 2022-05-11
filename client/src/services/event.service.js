@@ -29,7 +29,7 @@ const API_URL = "http://localhost:8080/api/event/";
 //     async createEvent(title, start, end, userId, days) {
 //         // const start = ((startTime) ? set(startTime, {year: getYear(startDate), month: getMonth(startDate), date: getDate(startDate)}) : startDate).toISOString();
 //         // const end = ((endTime) ? set(endTime, {year: getYear(endDate), month: getMonth(endDate), date: getDate(endDate)}) : endDate).toISOString();
-//         console.warn("start: ", start, "\nend: ", end)
+//         console.warn("start: ", typeof start, "\nend: ", end)
 //         const r = (await axios.post(API_URL + userId, { title, start, end, userId, days })).data;
 
 //         if(r.status === 200) {
@@ -40,7 +40,7 @@ const API_URL = "http://localhost:8080/api/event/";
 //     }
 
 //     async getEvents() {
-//         const r = (await axios.get(API_URL + this.userId, { headers: authHeader() })).data;
+//         const r = (await axios.get(API_URL + this.userId)).data;
 
 //         if(r.status === 200 || r.status === 404){
 //             this.setState({events: r.events.map(e => {
@@ -82,11 +82,11 @@ const API_URL = "http://localhost:8080/api/event/";
 
 class EventService {
     
-    async createEvent(title, start, end, userId, days) {
+    async createEvent(title, startDate, endDate, userId, days) {
         // const start = ((startTime) ? set(startTime, {year: getYear(startDate), month: getMonth(startDate), date: getDate(startDate)}) : startDate).toISOString();
         // const end = ((endTime) ? set(endTime, {year: getYear(endDate), month: getMonth(endDate), date: getDate(endDate)}) : endDate).toISOString();
-        console.warn("start: ", start, "\nend: ", end)
-        const r = (await axios.post(API_URL + userId, { title, start, end, userId, days })).data;
+        console.warn("start: ", startDate, "\nend: ", endDate)
+        const r = (await axios.post(API_URL + userId, { title, startDate, endDate, userId, days })).data;
         return r; 
     }
 

@@ -14,7 +14,6 @@ import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-// import AuthVerify from "./common/auth-verify";
 import EventBus from "./common/EventBus";
 
 class App extends Component {
@@ -64,10 +63,12 @@ class App extends Component {
     return (
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to={"/"} className="navbar-brand">
-            codangz
-          </Link>
           <div className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link to={"/"} className="navbar-brand">
+                codangz
+              </Link>
+            </li>
             <li className="nav-item">
               <Link to={"/home"} className="nav-link">
                 Home
@@ -131,15 +132,18 @@ class App extends Component {
 
         <div className="container mt-3">
           <Switch>
+            <Route exact path={["/", "/home"]} component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
+            <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
           </Switch>
         </div>
-        <Route path="/user" component={BoardUser} />
-        <Route exact path={["/", "/home"]} component={Home} />
+  
+        {/* <Route path="/user" component={BoardUser} />
+        <Route exact path={["/", "/home"]} component={Home} /> */}
 
         { /*<AuthVerify logOut={this.logOut}/> */ }
       </div>
@@ -147,6 +151,5 @@ class App extends Component {
   }
 }
 
-
-
 export default App;
+

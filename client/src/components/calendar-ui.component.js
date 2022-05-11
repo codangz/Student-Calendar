@@ -1,4 +1,4 @@
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import { Calendar, dateFnsLocalizer, styles } from "react-big-calendar";
 import format from "date-fns/format";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
@@ -56,15 +56,17 @@ const CalendarUI = (props) => {
           }
         }>Add Class</button>
       </div>
-      <Calendar
-      localizer={localizer}
-      events={props.events}
-      startAccessor="start"
-      endAccessor="end"
-      style ={{height : 1000, margin : "50px"}}
-      onSelectSlot={onSelectSlot}
-      selectable
-      />
+      <div className="calendar">
+        <Calendar
+        localizer={localizer}
+        events={props.events}
+        startAccessor="start"
+        endAccessor="end"
+        style ={{height : 1000, margin : "10px"}}
+        onSelectSlot={onSelectSlot}
+        selectable
+        />
+      </div>
       <SelectedPopup
       setAllEvents={setAllEvents}
       trigger={popupAlert}

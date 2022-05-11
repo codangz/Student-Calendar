@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 //import { isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, addDays, set, getYear, getMonth, getDate, isEqual, toDate } from "date-fns";
 import DatePicker from "react-datepicker";
-import { EventService } from "../../services/event.service";
+import EventService from "../../services/event.service";
 
 class AddEvent extends React.Component {
 
@@ -27,6 +27,8 @@ class AddEvent extends React.Component {
         this.handleChange = this.handleChange.bind(this)
         //this.handleAddClass = this.handleAddClass.bind(this)
         this.handleAddEvent = this.handleAddEvent.bind(this)
+        this.reset = this.reset.bind(this)
+
     }
 
     reset() {
@@ -54,7 +56,12 @@ class AddEvent extends React.Component {
     
     handleChange(e) {
         const {name, value} = e.target
-        this.setState({ [name]: value })
+        
+        this.setState(
+            (name.includes('Date') || name.includes('Time')) 
+            ? { [name]: value } 
+            : { [name]: value, isTimeInvalid: false, invalidMessage: '' }
+        ) 
     }
 
 
@@ -91,9 +98,13 @@ class AddEvent extends React.Component {
     */
 
     async handleAddEvent() {
+        const { title, startDate, endDate, startTime, endTime, days, newEvent } = this.state;
 
-        const start = new Date(this.state.startDate, this.state.startTime);
-        const end = new Date(this.state.endDate, this.state.endTime);
+        const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 
+        startTime.getHours(), startTime.getMinutes(), startTime.getSeconds());
+
+        const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 
+        endTime.getHours(), endTime.getMinutes(), endTime.getSeconds());
 
         if(start > end){
             this.setState({ isTimeInvalid: true, invalidMessage: 'The event can\'t end before it starts.' })
@@ -104,12 +115,12 @@ class AddEvent extends React.Component {
         }
 
         else {
-            const r = (await EventService.createEvent(this.state.title, start, end, this.props.user.id, null));
+            const r = (await EventService.createEvent(title, start.toString(), end.toString(), this.props.user.id, null));
 
             if (r.status === 200) {
                 alert(`The event "${r.title}" was successfully created!`)
                 console.warn("The event succesfully created: ", this.state.newEvent)
-                this.handleClose()
+                // this.handleClose()
             }
             else {
                 console.warn("Failed to create event.", this.state.newEvent)
@@ -152,12 +163,12 @@ class AddEvent extends React.Component {
                 <table align="center">
                     <tbody>
                         <tr>
-                            <td align="right">Start Date</td>
+                            <td align="right" >Start Date</td>
                             <td>
                                 <DatePicker
                                 name="startDate"
                                 placeholderText="Start Date"
-                                style={{ mariginRight: "10px"}}
+                                style={{mariginRight: "10px"}}
                                 selected={this.state.startDate}
                                 onChange={this.handleChange}
                                 />
@@ -199,6 +210,7 @@ class AddEvent extends React.Component {
                                 placeholderText="End Time"
                                 selected={this.state.endTime}
                                 onChange={this.handleChange}
+                                minTime={this.state.startDate}
                                 />
                             </td>
                         </tr>

@@ -1,5 +1,4 @@
 const Event = require('../models/events.model');
-const User = require('../models/user.model');
 
 const eventService = {
     create: async (title, startDate, endDate, creator, days) => {
@@ -59,6 +58,7 @@ const eventService = {
         const returnVal = {};
 
         try {
+            console.warn(title, typeof startDate, typeof endDate);
             returnVal.event = await Event.create({ title, startDate, endDate, creator, days });
             returnVal.status = 200;
         }

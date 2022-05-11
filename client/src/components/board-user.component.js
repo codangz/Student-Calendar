@@ -6,7 +6,7 @@ import Calendar from "./calendar-ui.component";
 //
 import { Redirect } from "react-router-dom";
 import AuthService from "../services/auth.service";
-import { EventService } from "../services/event.service";
+import EventService from "../services/event.service";
 //
 export default class BoardUser extends Component {
   constructor(props) {

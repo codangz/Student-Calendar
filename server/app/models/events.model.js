@@ -9,15 +9,13 @@ const Event = mongoose.model(
       required: true
     },
     startDate: {
-        type: Date,
-        default: new Date,
-        alias: 'start',
+        type: String,
+        time: true,
         required: true
     },
     endDate: {
-        type: Date,
-        default: new Date,
-        alias: 'end',
+        type: String,
+        trim: true,
         required: true
     },
     creator: {
