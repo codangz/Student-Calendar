@@ -113,10 +113,10 @@ class AddEvent extends React.Component {
         //console.warn("handle_start: ", start, "\nhandle_end: ", end)
 
         if(start > end) {
-            console.warn('The event can\'t end before it starts.')
+            alert('The event can\'t end before it starts.')
         }
         else if(end - start < 5*60*1000) {
-            console.warn('The event\'s minimum duration is 5 minutes.')
+            alert('The event\'s minimum duration is 5 minutes.')
         }
         else {
             const r = (await EventService.createEvent(title, start, end, this.props.user.id, null))
@@ -131,9 +131,10 @@ class AddEvent extends React.Component {
 
                 // conflict
                 if(r.status === 409){
+                    console.warn("conflict another event")
                     alert( r.message.replace(/^(.+?with\s).+$/, '$1') + 'the following events: \n' + r.overlaps.reduce(
                         (acc, cur) => ( 
-                            acc + `\n  * ${cur.title} | ${this.context.getDate(new Date(cur.startDate), new Date(cur.endDate))}`
+                            acc + `\n  * ${cur.title} | ${new Date(cur.startDate)} - ${new Date(cur.endDate)}`
                         ), ''
                     ))
                 }

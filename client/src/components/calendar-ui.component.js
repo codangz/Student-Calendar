@@ -156,33 +156,9 @@ class CalendarUI extends Component {
         //
         />
       </div>
-<<<<<<< HEAD
-      <div className="calendar">
-        <Calendar
-        localizer={localizer}
-        events={props.events}
-        startAccessor="start"
-        endAccessor="end"
-        style ={{height : 1000, margin : "10px"}}
-        onSelectSlot={onSelectSlot}
-        selectable
-        />
-      </div>
-      <SelectedPopup
-      setAllEvents={setAllEvents}
-      trigger={popupAlert}
-      setTrigger={setPopupAlert}
-      isAddClass={isAddClass}
-      setIsAddClass={setIsAddClass}
-      selectedInfo={selectedInfo}
-      user={props.user}
-      />
-    </div>
-  )
-=======
     )
   }
->>>>>>> fbbddf82abf0b38380d2c7be346d3584ffae4d8d
 }
+
 
 export default CalendarUI;

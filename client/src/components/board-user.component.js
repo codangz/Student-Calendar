@@ -3,15 +3,7 @@ import React, { Component } from "react";
 import UserService from "../services/user.service";
 import EventBus from "../common/EventBus";
 import Calendar from "./calendar-ui.component";
-<<<<<<< HEAD
-//
-import { Redirect } from "react-router-dom";
-import AuthService from "../services/auth.service";
-import EventService from "../services/event.service";
-//
-=======
 
->>>>>>> fbbddf82abf0b38380d2c7be346d3584ffae4d8d
 export default class BoardUser extends Component {
   constructor(props) {
     super(props)

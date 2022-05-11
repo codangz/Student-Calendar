@@ -9,23 +9,14 @@ const Event = mongoose.model(
       required: true
     },
     startDate: {
-<<<<<<< HEAD
-        type: String,
-        time: true,
-        required: true
-    },
-    endDate: {
-        type: String,
-        trim: true,
-        required: true
-=======
-      type: Date,
+      type: String,
+      trim: true,
       required: true
     },
     endDate: {
-      type: Date,
+      type: String,
+      trim: true,
       required: true
->>>>>>> fbbddf82abf0b38380d2c7be346d3584ffae4d8d
     },
     creator: {
       type: mongoose.ObjectId,
