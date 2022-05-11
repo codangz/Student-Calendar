@@ -72,7 +72,7 @@ class AddEvent extends React.Component {
                 const start = set(startTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)})
                 const end = set(endTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)})
                 const r = EventService.createEvent(title, start, end, this.props.user.id, null)
-                
+
                 if (r.status === 200) {
                     console.warn("The event succesfully created: ")
                 }
@@ -100,12 +100,12 @@ class AddEvent extends React.Component {
     }
 
     async handleAddEvent() {
-        
+
         const { title, startDate, endDate, startTime, endTime } = this.state
 
-        const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 
+        const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(),
         startTime.getHours(), startTime.getMinutes(), startTime.getSeconds())
-        const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 
+        const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(),
         endTime.getHours(), endTime.getMinutes(), endTime.getSeconds())
 
         //console.warn("handle_start: ", start, "\nhandle_end: ", end)
@@ -118,7 +118,7 @@ class AddEvent extends React.Component {
         }
         else {
             const r = (await EventService.createEvent(title, start, end, this.props.user.id, null))
-    
+
             if (r.status === 200) {
                 //alert(`The event "${r.title}" was successfully created!`)
                 console.warn("The event succesfully created: ")
@@ -130,12 +130,12 @@ class AddEvent extends React.Component {
                 // conflict
                 if(r.status === 409){
                     alert( r.message.replace(/^(.+?with\s).+$/, '$1') + 'the following events: \n' + r.overlaps.reduce(
-                        (acc, cur) => ( 
+                        (acc, cur) => (
                             acc + `\n  * ${cur.title} | ${this.context.getDate(new Date(cur.startDate), new Date(cur.endDate))}`
                         ), ''
                     ))
                 }
-                
+
                 else if(r.status === 404){
                     alert('An error occured.')
                 }
@@ -143,6 +143,12 @@ class AddEvent extends React.Component {
         }
         this.props.setIsSubmitted(true)
         this.handleClose()
+    }
+
+    checkDay = (day) => {
+        let newDays = {...this.state.days}
+        newDays[day.target.name] = day.target.checked
+        this.setState({days: newDays})
     }
 
     render = () => (this.props.isAddClass) ? (
@@ -220,49 +226,49 @@ class AddEvent extends React.Component {
                         <label>Mo</label>
                         <input type="checkbox" name="mon" id="day"
                         selected={this.state.days.mon}
-                        onChange={(day) => this.setState({days: {mon: day.target.checked}})}
+                        onChange={this.checkDay}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Tu</label>
                         <input type="checkbox" name="tue" id="day"
                         selected={this.state.days.tue}
-                        onChange={(day) => this.setState({days: {tue: day.target.checked}})}
+                        onChange={this.checkDay}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>We</label>
                         <input type="checkbox" name="wed" id="day"
                         selected={this.state.days.wed}
-                        onChange={(day) => this.setState({days: {wed: day.target.checked}})}
+                        onChange={this.checkDay}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Th</label>
                         <input type="checkbox" name="thu" id="day"
                         selected={this.state.days.thu}
-                        onChange={(day) => this.setState({days: {thu: day.target.checked}})}
+                        onChange={this.checkDay}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Fr</label>
                         <input type="checkbox" name="fri" id="day"
                         selected={this.state.days.fri}
-                        onChange={(day) => this.setState({days: {fri: day.target.checked}})}
+                        onChange={this.checkDay}
                         />
                     </span>
                     <span style={{marginRight: "5px"}}>
                         <label>Sa</label>
                         <input type="checkbox" name="sat" id="day"
                         selected={this.state.days.sat}
-                        onChange={(day) => this.setState({days: {sat: day.target.checked}})}
+                        onChange={this.checkDay}
                         />
                     </span>
                     <span>
                         <label>Su</label>
                         <input type="checkbox" name="sun" id="day"
                         selected={this.state.days.sun}
-                        onChange={(day) => this.setState({days: {sun: day.target.checked}})}
+                        onChange={this.checkDay}
                         />
                     </span>
                 </div>
