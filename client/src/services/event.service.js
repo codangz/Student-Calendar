@@ -5,7 +5,7 @@
 // app.delete('/api/event/:userId/:eventId', eventController.delete);
 
 import axios from "axios";
-import React from "react";
+import React, { Component } from "react";
 
 const API_URL = "http://localhost:8080/api/event/";
 
@@ -78,15 +78,20 @@ const API_URL = "http://localhost:8080/api/event/";
 // }
 
 
-
-
-class EventService {
+class EventService extends Component {
+    constructor(props){
+        super(props)    
+            this.getEvents = this.getEvents.bind(this)
+            this.createEvent = this.createEvent.bind(this)
+            this.editEvent = this.editEvent.bind(this)
+            this.deleteEvent = this.deleteEvent.bind(this)
+        }
     
-    async createEvent(title, start, end, userId, days) {
+    async createEvent(title, startDate, endDate, userId, days) {
         // const start = ((startTime) ? set(startTime, {year: getYear(startDate), month: getMonth(startDate), date: getDate(startDate)}) : startDate).toISOString();
         // const end = ((endTime) ? set(endTime, {year: getYear(endDate), month: getMonth(endDate), date: getDate(endDate)}) : endDate).toISOString();
-        console.warn("start: ", start, "\nend: ", end)
-        const r = (await axios.post(API_URL + userId, { title, start, end, userId, days })).data;
+        //console.warn("start: ", start, "\nend: ", end)
+        const r = (await axios.post(API_URL + userId, { title, startDate, endDate, userId, days })).data;
         return r; 
     }
 

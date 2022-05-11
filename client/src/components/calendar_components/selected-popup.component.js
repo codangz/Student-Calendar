@@ -12,8 +12,12 @@ function SelectedPopup(props) {
                 setTrigger={props.setTrigger}
                 isAddClass={props.isAddClass}
                 setIsAddClass={props.setIsAddClass}
+                setIsSubmitted={props.setIsSubmitted}
                 selectedInfo={props.selectedInfo}
                 user={props.user}
+                //
+                allEvents={props.allEvents}
+                //
                 />
                 {props.children}
             </div>

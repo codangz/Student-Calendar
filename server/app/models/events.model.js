@@ -9,20 +9,16 @@ const Event = mongoose.model(
       required: true
     },
     startDate: {
-        type: Date,
-        default: new Date,
-        alias: 'start',
-        required: true
+      type: Date,
+      required: true
     },
     endDate: {
-        type: Date,
-        default: new Date,
-        alias: 'end',
-        required: true
+      type: Date,
+      required: true
     },
     creator: {
-        type: mongoose.ObjectId,
-        required: true
+      type: mongoose.ObjectId,
+      required: true
     },
     days: {
       type: {},

@@ -3,6 +3,9 @@ const User = require('../models/user.model');
 
 const eventService = {
     create: async (title, startDate, endDate, creator, days) => {
+
+        //console.log("verify:\n", "title: ", title, "\nstartDate: ", startDate, "\nendDate: ", endDate)
+
         // error if event is shorter than 5 min 
         if(new Date(endDate) - new Date(startDate) < 5*60*1000) {
             return {

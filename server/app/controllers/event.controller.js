@@ -5,6 +5,8 @@ const eventController = {
         const {userId} = req.params
         const {title, startDate, endDate, days} = req.body
 
+        //console.warn("controller:\n", "title: ", title, "\nstartDate: ", startDate, "\nendDate: ", endDate, "\nuserID: ", userId)
+
         const r = await verifyEvent.create(title, startDate, endDate, userId, days)
 
         return res.status(200).json(r)
