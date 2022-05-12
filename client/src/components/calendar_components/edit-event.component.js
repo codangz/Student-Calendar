@@ -60,7 +60,7 @@ class EditEvent extends Component {
                 alert('The event\'s minimum duration is 5 minutes.')
             }
             else {
-                const r = (await EventService.editEvent(this.props.user.id, this.props.selectedEventId, {title: title, startDate: startDate, endDate: endDate}))
+                const r = (await EventService.editEvent(this.props.user.id, this.props.selectedEventId, {title: title, startDate: start, endDate: end}))
     
                 if (r.status === 200) {
                     //alert(`The event "${r.title}" was successfully created!`)
