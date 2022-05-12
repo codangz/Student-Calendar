@@ -91,7 +91,7 @@ class CalendarUI extends Component {
             startDate: new Date(element.startDate),
             endDate: new Date(element.endDate),
             days: element.days
-          })
+         })
 
           cEvents.push({
             title: element.title,
