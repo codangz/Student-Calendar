@@ -13,8 +13,8 @@ class AddEvent extends Component {
             title: "",
             startDate: (!this.props.isAddClass) ? this.props.selectedInfo.start : new Date(),
             endDate: (!this.props.isAddClass) ? this.props.selectedInfo.start : new Date(),
-            startTime: new Date(),
-            endTime: new Date(),
+            startTime: (!this.props.isAddClass) ? this.props.selectedInfo.start : new Date(),
+            endTime: (!this.props.isAddClass) ? this.props.selectedInfo.end : new Date(),
             days: {mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false},
             isLoading: false
         }
