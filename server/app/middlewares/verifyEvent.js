@@ -77,6 +77,9 @@ const eventService = {
     },
 
     update: async(userId, eventId, edits) => {
+
+        //console.log("verify:\n", "userId: ", userId, "\neventId: ", eventId, "\nedits: ", edits)
+
         const oldEvent = await Event.findById(eventId);
         
         // if event less than 5 min --> invalid 
@@ -178,6 +181,8 @@ const eventService = {
     find: async (userId) => await Event.find({creator: userId}),
 
     delete: async(userId, eventId) => {
+        //console.log("verify:\n", "userId: ", userId, "\neventId: ", eventId)
+
         try {
             await Event.findOneAndDelete({ _id: eventId, creator: userId })
             return 200

@@ -1,10 +1,9 @@
-import React from "react";
+import React, { Component } from "react";
 import { isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, addDays, set, getYear, getMonth, getDate, isEqual, toDate } from "date-fns";
-//import { set, getYear, getMonth, getDate, parse } from "date-fns";
 import DatePicker from "react-datepicker";
 import EventService from "../../services/event.service";
 
-class AddEvent extends React.Component {
+class AddEvent extends Component {
 
     constructor(props) {
         super(props)
@@ -152,7 +151,7 @@ class AddEvent extends React.Component {
 
             if (r.status === 200) {
                 //alert(`The event "${r.title}" was successfully created!`)
-                console.warn("The event succesfully created: ")
+                console.warn("The event succesfully created.")
                 //this.handleClose()
             }
             else {
