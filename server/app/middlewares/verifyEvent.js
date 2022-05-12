@@ -61,7 +61,7 @@ const eventService = {
         const returnVal = {};
 
         try {
-            console.warn(title, typeof startDate, typeof endDate);
+            //console.warn(title, typeof startDate, typeof endDate);
             returnVal.event = await Event.create({ title, startDate, endDate, creator, days });
             returnVal.status = 200;
         }
