@@ -88,7 +88,7 @@ class EventService extends Component {
         }
     
     async createEvent(title, startDate, endDate, userId, days) {
-        //console.warn("start: ", start, "\nend: ", end)
+        console.warn("start: ", startDate, "\nend: ", endDate)
         const r = (await axios.post(API_URL + userId, { title, startDate, endDate, userId, days })).data;
         return r; 
     }

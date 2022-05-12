@@ -62,41 +62,69 @@ class AddEvent extends React.Component {
     handleAddClass() {
         const { startDate, endDate, days, title, startTime, endTime } = this.state
         //const temp = this.props.allEvents.map((x) => x)
-        var count = 0
-        for (let currentDate = toDate(startDate); !isEqual(currentDate,endDate); currentDate = addDays(currentDate, 1)) {
-            if ((days.mon && isMonday(currentDate)) ||
-            (days.tue && isTuesday(currentDate)) ||
-            (days.wed && isWednesday(currentDate)) ||
-            (days.thu && isThursday(currentDate)) ||
-            (days.fri && isFriday(currentDate)) ||
-            (days.sat && isSaturday(currentDate)) ||
-            (days.sun && isSunday(currentDate))) {
-                const start = set(startTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)})
-                const end = set(endTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)})
-                const r = EventService.createEvent(title, start, end, this.props.user.id, null)
-
-                if (r.status === 200) {
-                    console.warn("The event succesfully created: ")
-                }
-                else {
-                    console.warn("Failed to create event.")
-                }
-
-                count++
-
-                /*
-                temp.push({
-                    title: title,
-                    start: set(startTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
-                    end: set(endTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
-                })
-                */
-            }
+        if(startTime > endTime || startDate > endDate) {
+            alert('The class can\'t end before it starts.')
         }
-        console.log("loop_count: ", count)
-        //console.log("temp: ", temp)
-        //this.props.setAllEvents(temp)
-        //console.warn("Class Added")
+        else if(endTime - startTime < 5*60*1000) {
+            alert('The class\'s minimum duration is 5 minutes.')
+        }
+        else {
+            var count = 0
+            for (let currentDate = toDate(startDate); !isEqual(currentDate,endDate); currentDate = addDays(currentDate, 1)) {
+                if ((days.mon && isMonday(currentDate)) ||
+                (days.tue && isTuesday(currentDate)) ||
+                (days.wed && isWednesday(currentDate)) ||
+                (days.thu && isThursday(currentDate)) ||
+                (days.fri && isFriday(currentDate)) ||
+                (days.sat && isSaturday(currentDate)) ||
+                (days.sun && isSunday(currentDate))) {
+                    // console.log(currentDate)
+                    // const start = set(startTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)})
+                    // const end = set(endTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)})
+
+                    const start = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(),
+                    startTime.getHours(), startTime.getMinutes(), startTime.getSeconds())
+                    
+                    const end = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(),
+                    endTime.getHours(), endTime.getMinutes(), endTime.getSeconds())
+
+                    const r = EventService.createEvent(title, start, end, this.props.user.id, null)
+
+                    if (r.status === 200) {
+                        console.warn("The event succesfully created: ")
+                    }
+                    else {
+                        console.warn("Failed to create event.")
+                        if(r.status === 409){
+                            console.warn("conflict with another event")
+                            alert( r.message.replace(/^(.+?with\s).+$/, '$1') + 'the following events: \n' + r.overlaps.reduce(
+                                (acc, cur) => ( 
+                                    acc + `\n  * ${cur.title} | ${new Date(cur.startDate)} - ${new Date(cur.endDate)}`
+                                ), ''
+                            ))
+                        }
+        
+                        else if(r.status === 404){
+                            alert('An error occured.')
+                        }
+                    }
+
+                    count++
+
+                    /*
+                    temp.push({
+                        title: title,
+                        start: set(startTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
+                        end: set(endTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
+                    })
+                    */
+                }
+            }
+            console.log("loop_count: ", count)
+            //console.log("temp: ", temp)
+            //this.props.setAllEvents(temp)
+            //console.warn("Class Added")
+        }
         this.props.setIsSubmitted(true)
         this.handleClose()
     }
@@ -107,6 +135,7 @@ class AddEvent extends React.Component {
 
         const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(),
         startTime.getHours(), startTime.getMinutes(), startTime.getSeconds())
+        
         const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(),
         endTime.getHours(), endTime.getMinutes(), endTime.getSeconds())
 
@@ -131,15 +160,10 @@ class AddEvent extends React.Component {
 
                 // conflict
                 if(r.status === 409){
-                    console.warn("conflict another event")
+                    console.warn("conflict with another event")
                     alert( r.message.replace(/^(.+?with\s).+$/, '$1') + 'the following events: \n' + r.overlaps.reduce(
-<<<<<<< HEAD
                         (acc, cur) => ( 
                             acc + `\n  * ${cur.title} | ${new Date(cur.startDate)} - ${new Date(cur.endDate)}`
-=======
-                        (acc, cur) => (
-                            acc + `\n  * ${cur.title} | ${this.context.getDate(new Date(cur.startDate), new Date(cur.endDate))}`
->>>>>>> f8012ffd9d482488a477461972884588b55c58dd
                         ), ''
                     ))
                 }

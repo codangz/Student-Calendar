@@ -62,9 +62,9 @@ const Hero = ({
                Codangz<span className="text-color-primary">Calendar</span>
             </h1>
             <div className="container-xs">
-              <p className="m-0 mb-32 reveal-from-bottom" data-reveal-delay="400">
+              {/* <p className="m-0 mb-32 reveal-from-bottom" data-reveal-delay="400">
                 FOR STUDENTS, BY STUDENTS
-                </p>
+                </p> */}
               <div className="reveal-from-bottom" data-reveal-delay="600">
                 <ButtonGroup>
                   <Button tag="a" color="dark" wideMobile href="https://github.com/codangz/CS4800-Project">
