@@ -146,6 +146,35 @@ const FeaturesSplit = ({
               </div>
             </div>
 
+            <div className="split-item">
+              <div className="split-item-content center-content-mobile reveal-from-left" data-reveal-container=".split-item">
+                <div className="text-xxs text-color-primary fw-600 tt-u mb-8">
+                  Update your classes and events
+                  </div>
+                <h3 className="mt-0 mb-12">
+                  Edit and Delete 
+                  </h3>
+                <p className="m-0">
+                  Click on any existing event and press delete to erase it, or edit the existing information and press 
+                  "Submit Changes".
+                  </p>
+              </div>
+              <div className={
+                classNames(
+                  'split-item-image center-content-mobile reveal-from-bottom',
+                  imageFill && 'split-item-image-fill'
+                )}
+                data-reveal-container=".split-item">
+                <Image
+                  src={require('./../../assets/images/ezgif.com-gif-maker-4.gif')}
+                  alt="Features split 01"
+                  width={528}
+                  height={396} />
+              </div>
+            </div>
+
+            
+
           </div>
         </div>
       </div>

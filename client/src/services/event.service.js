@@ -89,13 +89,13 @@ class EventService extends Component {
     
     async createEvent(title, startDate, endDate, userId, days) {
         console.warn("start: ", startDate, "\nend: ", endDate)
-        const r = (await axios.post(API_URL + userId, { title, startDate, endDate, userId, days })).data;
-        return r; 
+        const r = await axios.post(API_URL + userId, { title, startDate, endDate, userId, days });
+        return r.data; 
     }
 
     async getEvents(userId) {
-        const r = (await axios.get(API_URL + userId)).data;
-        return r;
+        const r = await axios.get(API_URL + userId);
+        return r.data; 
     }
 
     async editEvent(userId, eventId, edits) {

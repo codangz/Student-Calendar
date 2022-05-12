@@ -131,7 +131,6 @@ class AddEvent extends Component {
             }
             else {
                 console.warn("Failed to create event.")
-                console.log(r)
 
                 // conflict
                 if(r.status === 409){

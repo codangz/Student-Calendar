@@ -16,8 +16,6 @@ const eventController = {
         const {userId, eventId} = req.params
         const {edits} = req.body
 
-        //console.log("controller:\n", "userId: ", userId, "\neventId: ", eventId, "\nedits: ", edits)
-
         const r = await verifyEvent.update(userId, eventId, edits)
 
         return res.status(200).json(r)
@@ -32,9 +30,6 @@ const eventController = {
 
     delete: async(req, res) => {
         const {userId, eventId} = req.params
-
-        //console.log("controller:\n", "userId: ", userId, "\neventId: ", eventId)
-
         const status = await verifyEvent.delete(userId, eventId)
 
         return res.status(200).json({status})

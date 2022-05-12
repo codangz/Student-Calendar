@@ -5,6 +5,7 @@ import Calendar from './CalendarUI'
 
 function App() {
 
+
   return (
     <div className="App">
       <h1>Student Calendar</h1>
@@ -12,6 +13,7 @@ function App() {
       <Calendar />
     </div>
   );
+
 }
 
 export default App;
