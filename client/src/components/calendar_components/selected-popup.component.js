@@ -20,6 +20,7 @@ function SelectedPopup(props) {
                         {(props.isAddEvent) ?
                         <   AddEvent
                             setTrigger={props.setTrigger}
+                            setIsAddEvent={props.setIsAddEvent}
                             isAddClass={props.isAddClass}
                             setIsAddClass={props.setIsAddClass}
                             setIsSubmitted={props.setIsSubmitted}

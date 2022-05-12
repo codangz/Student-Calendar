@@ -40,6 +40,7 @@ class AddEvent extends Component {
 
     handleClose() {
         this.reset()
+        this.props.setIsAddEvent(false)
         this.props.setIsAddClass(false)
         this.props.setTrigger(false)
     }

@@ -117,6 +117,7 @@ class CalendarUI extends Component {
 
   onSelectSlot(slotInfo) {
     this.setState({
+      isAddEvent: true,
       selectedInfo: slotInfo,
       popupAlert: true
     })
@@ -151,8 +152,11 @@ class CalendarUI extends Component {
       <div>
         <div>
           <button style={{marginTop: "10px"}} onClick={() => {
-              this.setState({isAddClass: true})
-              this.setState({popupAlert: true})
+              this.setState({
+                isAddEvent: true,
+                isAddClass: true,
+                popupAlert: true
+              })
             }
           }>Add Class</button>
         </div>
