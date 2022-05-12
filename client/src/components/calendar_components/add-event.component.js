@@ -1,29 +1,22 @@
-import React from "react";
+import React, { Component } from "react";
+import "./popup.css";
 import { isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, addDays, set, getYear, getMonth, getDate, isEqual, toDate } from "date-fns";
-//import { set, getYear, getMonth, getDate, parse } from "date-fns";
 import DatePicker from "react-datepicker";
 import EventService from "../../services/event.service";
 
-class AddEvent extends React.Component {
+class AddEvent extends Component {
 
     constructor(props) {
         super(props)
 
         this.state = {
             title: "",
-            startDate: new Date(),
-            endDate: new Date(),
-            startTime: new Date(),
-            endTime: new Date(),
+            startDate: (!this.props.isAddClass) ? this.props.selectedInfo.start : new Date(),
+            endDate: (!this.props.isAddClass) ? this.props.selectedInfo.start : new Date(),
+            startTime: (!this.props.isAddClass) ? this.props.selectedInfo.start : new Date(),
+            endTime: (!this.props.isAddClass) ? this.props.selectedInfo.end : new Date(),
             days: {mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false},
-            isTimeInvalid: false, invalidMessage: ''
-            /*
-            newEvent : {
-                title: "",
-                start: (!this.props.isAddClass) ? this.props.selectedInfo.start : "",
-                end: (!this.props.isAddClass) ? this.props.selectedInfo.start : ""
-            }
-            */
+            isLoading: false
         }
 
         this.reset = this.reset.bind(this)
@@ -37,29 +30,23 @@ class AddEvent extends React.Component {
     reset() {
         this.setState({
             title: "",
-            startDate: "",
-            endDate: "",
-            startTime: "",
-            endTime: "",
+            startDate: (!this.props.isAddClass) ? this.props.selectedInfo.start : new Date(),
+            endDate: (!this.props.isAddClass) ? this.props.selectedInfo.start : new Date(),
+            startTime: new Date(),
+            endTime: new Date(),
             days: {mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false}
-            /*
-            newEvent : {
-                title: "",
-                start: (!this.props.isAddClass) ? this.props.selectedInfo.start : "",
-                end: (!this.props.isAddClass) ? this.props.selectedInfo.start : ""
-            }
-            */
         })
     }
 
     handleClose() {
         this.reset()
+        this.props.setIsAddEvent(false)
         this.props.setIsAddClass(false)
         this.props.setTrigger(false)
     }
 
     // TODO: Fix the add class function
-    handleAddClass() {
+    async handleAddClass() {
         const { startDate, endDate, days, title, startTime, endTime } = this.state
         //const temp = this.props.allEvents.map((x) => x)
         if(startTime > endTime || startDate > endDate) {
@@ -69,7 +56,7 @@ class AddEvent extends React.Component {
             alert('The class\'s minimum duration is 5 minutes.')
         }
         else {
-            var count = 0
+            this.setState({isLoading: true})
             for (let currentDate = toDate(startDate); !isEqual(currentDate,endDate); currentDate = addDays(currentDate, 1)) {
                 if ((days.mon && isMonday(currentDate)) ||
                 (days.tue && isTuesday(currentDate)) ||
@@ -88,7 +75,7 @@ class AddEvent extends React.Component {
                     const end = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(),
                     endTime.getHours(), endTime.getMinutes(), endTime.getSeconds())
 
-                    const r = EventService.createEvent(title, start, end, this.props.user.id, null)
+                    const r = (await EventService.createEvent(title, start, end, this.props.user.id, null))
 
                     if (r.status === 200) {
                         console.warn("The event succesfully created: ")
@@ -108,23 +95,10 @@ class AddEvent extends React.Component {
                             alert('An error occured.')
                         }
                     }
-
-                    count++
-
-                    /*
-                    temp.push({
-                        title: title,
-                        start: set(startTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
-                        end: set(endTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)}),
-                    })
-                    */
                 }
             }
-            console.log("loop_count: ", count)
-            //console.log("temp: ", temp)
-            //this.props.setAllEvents(temp)
-            //console.warn("Class Added")
         }
+        this.setState({isLoading: false})
         this.props.setIsSubmitted(true)
         this.handleClose()
     }
@@ -152,7 +126,7 @@ class AddEvent extends React.Component {
 
             if (r.status === 200) {
                 //alert(`The event "${r.title}" was successfully created!`)
-                console.warn("The event succesfully created: ")
+                console.warn("The event succesfully created.")
                 //this.handleClose()
             }
             else {
@@ -313,6 +287,14 @@ class AddEvent extends React.Component {
                 <button onClick={this.handleClose}>Cancel</button>
                 {this.props.children}
             </div>
+            {(this.state.isLoading) ?
+                <div className="popup">
+                    <div className="popup-inner">
+                        Generating Class Schedule...
+                    </div>
+                </div> 
+                : ""
+            }
         </div>
     ) : (
         <div>

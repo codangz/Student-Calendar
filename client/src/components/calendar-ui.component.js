@@ -3,6 +3,7 @@ import format from "date-fns/format";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
+import isEqual from "date-fns/isEqual";
 import React, { Component } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import SelectedPopup from "./calendar_components/selected-popup.component";
@@ -22,6 +23,7 @@ const localizer = dateFnsLocalizer({
   locales
 })
 
+/*
 const myEvents = [
   {
     title : "Meeting",
@@ -30,6 +32,7 @@ const myEvents = [
     end : new Date(2022,2,2)
   },
 ]
+*/
 
 class CalendarUI extends Component {
   constructor(props) {
@@ -41,10 +44,13 @@ class CalendarUI extends Component {
       currentUser: { username: "" },
 
       popupAlert: false,
+      isAddEvent: false,
       isAddClass: false,
+      isEdit: false,
       isSubmitted: false,
       selectedInfo: null,
-      allEvents: myEvents,
+      selectedEvent: null,
+      selectedEventId: null,
       events: [],//this.props.events
       calendarEvents: []
     }
@@ -52,6 +58,7 @@ class CalendarUI extends Component {
     this.fetchEvents = this.fetchEvents.bind(this)
     //this.fetchCalendarEvents = this.fetchCalendarEvents.bind(this)
     this.onSelectSlot = this.onSelectSlot.bind(this)
+    this.onSelectEvent = this.onSelectEvent.bind(this)
   }
 
   componentDidMount () {
@@ -109,8 +116,24 @@ class CalendarUI extends Component {
   }
 
   onSelectSlot(slotInfo) {
-    this.setState({selectedInfo: slotInfo})
-    this.setState({popupAlert: true})
+    this.setState({
+      isAddEvent: true,
+      selectedInfo: slotInfo,
+      popupAlert: true
+    })
+  }
+
+  onSelectEvent(calEvent) {
+    //console.log("calEvent: ", calEvent)
+    this.setState({
+      selectedEventId: this.state.events.find(element => 
+        element.title === calEvent.title &&
+        isEqual(element.startDate, calEvent.start) &&
+        isEqual(element.endDate, calEvent.end)).id,
+      selectedEvent: calEvent,
+      isEdit: true,
+      popupAlert: true
+    })
   }
 
   render() {
@@ -122,14 +145,18 @@ class CalendarUI extends Component {
     const { currentUser } = this.state
     const { calendarEvents } = this.state
     //
-    //console.log("allEvents: ", this.state.allEvents)
+    //console.log("selectedEventId: ", this.state.selectedEventId)
+    //console.log("events: ", this.state.events)
     //
     return(
       <div>
         <div>
           <button style={{marginTop: "10px"}} onClick={() => {
-              this.setState({isAddClass: true})
-              this.setState({popupAlert: true})
+              this.setState({
+                isAddEvent: true,
+                isAddClass: true,
+                popupAlert: true
+              })
             }
           }>Add Class</button>
         </div>
@@ -140,20 +167,23 @@ class CalendarUI extends Component {
         endAccessor="end"
         style ={{height : 1000, margin : "50px"}}
         onSelectSlot={this.onSelectSlot}
+        onSelectEvent={this.onSelectEvent}
         selectable
         />
         <SelectedPopup
-        setAllEvents={(e) => this.setState({allEvents: e})}
         trigger={this.state.popupAlert}
         setTrigger={(e) => this.setState({popupAlert: e})}
+        isAddEvent={this.state.isAddEvent}
+        setIsAddEvent={(e) => this.setState({isAddEvent: e})}
         isAddClass={this.state.isAddClass}
         setIsAddClass={(e) => this.setState({isAddClass: e})}
+        isEdit={this.state.isEdit}
+        setIsEdit={(e) => this.setState({isEdit: e})}
         setIsSubmitted={(e) => this.setState({isSubmitted: e})}
         selectedInfo={this.state.selectedInfo}
+        selectedEvent={this.state.selectedEvent}
+        selectedEventId={this.state.selectedEventId}
         user={currentUser}
-        //
-        allEvents={this.state.allEvents}
-        //
         />
       </div>
     )
