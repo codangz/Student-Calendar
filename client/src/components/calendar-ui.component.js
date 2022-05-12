@@ -23,6 +23,7 @@ const localizer = dateFnsLocalizer({
   locales
 })
 
+/*
 const myEvents = [
   {
     title : "Meeting",
@@ -31,6 +32,7 @@ const myEvents = [
     end : new Date(2022,2,2)
   },
 ]
+*/
 
 class CalendarUI extends Component {
   constructor(props) {
@@ -42,13 +44,13 @@ class CalendarUI extends Component {
       currentUser: { username: "" },
 
       popupAlert: false,
+      isAddEvent: false,
       isAddClass: false,
-      isSubmitted: false,
       isEdit: false,
+      isSubmitted: false,
       selectedInfo: null,
       selectedEvent: null,
       selectedEventId: null,
-      allEvents: myEvents,
       events: [],//this.props.events
       calendarEvents: []
     }
@@ -165,9 +167,10 @@ class CalendarUI extends Component {
         selectable
         />
         <SelectedPopup
-        setAllEvents={(e) => this.setState({allEvents: e})}
         trigger={this.state.popupAlert}
         setTrigger={(e) => this.setState({popupAlert: e})}
+        isAddEvent={this.state.isAddEvent}
+        setIsAddEvent={(e) => this.setState({isAddEvent: e})}
         isAddClass={this.state.isAddClass}
         setIsAddClass={(e) => this.setState({isAddClass: e})}
         isEdit={this.state.isEdit}
@@ -177,9 +180,6 @@ class CalendarUI extends Component {
         selectedEvent={this.state.selectedEvent}
         selectedEventId={this.state.selectedEventId}
         user={currentUser}
-        //
-        allEvents={this.state.allEvents}
-        //
         />
       </div>
     )

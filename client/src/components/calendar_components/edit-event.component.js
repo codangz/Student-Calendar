@@ -12,8 +12,8 @@ class EditEvent extends Component {
             title: this.props.selectedEvent.title,
             startDate: this.props.selectedEvent.start,
             endDate: this.props.selectedEvent.end,
-            startTime: this.props.selectedEvent.start.getTime(),
-            endTime: this.props.selectedEvent.end.getTime(),
+            startTime: this.props.selectedEvent.start,
+            endTime: this.props.selectedEvent.end,
             days: {mon:false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false},
         }
 

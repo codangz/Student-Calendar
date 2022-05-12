@@ -55,7 +55,6 @@ class AddEvent extends Component {
             alert('The class\'s minimum duration is 5 minutes.')
         }
         else {
-            this.props.setTrigger(false)
             this.setState({isLoading: true})
             for (let currentDate = toDate(startDate); !isEqual(currentDate,endDate); currentDate = addDays(currentDate, 1)) {
                 if ((days.mon && isMonday(currentDate)) ||
