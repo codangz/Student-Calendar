@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./popup.css";
-import { isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, addDays, set, getYear, getMonth, getDate, isEqual, toDate } from "date-fns";
+import { isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, addDays, isEqual, toDate } from "date-fns";
 import DatePicker from "react-datepicker";
 import EventService from "../../services/event.service";
 
@@ -45,10 +45,9 @@ class AddEvent extends Component {
         this.props.setTrigger(false)
     }
 
-    // TODO: Fix the add class function
     async handleAddClass() {
         const { startDate, endDate, days, title, startTime, endTime } = this.state
-        //const temp = this.props.allEvents.map((x) => x)
+
         if(startTime > endTime || startDate > endDate) {
             alert('The class can\'t end before it starts.')
         }
@@ -66,8 +65,6 @@ class AddEvent extends Component {
                 (days.sat && isSaturday(currentDate)) ||
                 (days.sun && isSunday(currentDate))) {
                     // console.log(currentDate)
-                    // const start = set(startTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)})
-                    // const end = set(endTime, {year: getYear(currentDate), month: getMonth(currentDate), date: getDate(currentDate)})
 
                     const start = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(),
                     startTime.getHours(), startTime.getMinutes(), startTime.getSeconds())
@@ -90,7 +87,6 @@ class AddEvent extends Component {
                                 ), ''
                             ))
                         }
-        
                         else if(r.status === 404){
                             alert('An error occured.')
                         }
@@ -125,9 +121,7 @@ class AddEvent extends Component {
             const r = (await EventService.createEvent(title, start, end, this.props.user.id, null))
 
             if (r.status === 200) {
-                //alert(`The event "${r.title}" was successfully created!`)
                 console.warn("The event succesfully created.")
-                //this.handleClose()
             }
             else {
                 console.warn("Failed to create event.")

@@ -41,8 +41,6 @@ class EditEvent extends Component {
         this.props.setTrigger(false)
     }
     
-
-    //TODO: connect this fucntion to the backend for update
     async handleEditEvent() {
         const { title, startDate, endDate, startTime, endTime } = this.state
 
@@ -63,9 +61,7 @@ class EditEvent extends Component {
                 const r = (await EventService.editEvent(this.props.user.id, this.props.selectedEventId, {title: title, startDate: start, endDate: end}))
     
                 if (r.status === 200) {
-                    //alert(`The event "${r.title}" was successfully created!`)
                     console.warn("The event succesfully edited.")
-                    //this.handleClose()
                 }
                 else {
                     console.warn("Failed to edit event.")
@@ -86,20 +82,15 @@ class EditEvent extends Component {
                 }
             }
         }
-
-        //props.setAllEvents((currentEvents => [...currentEvents, newEvent]))
-        //console.warn("Event Added")
         this.props.setIsSubmitted(true)
         this.handleClose()
     }
 
-    //TODO: create a handle delete fucntion
     async handleDeleteEvent() {
 
         const r = (await EventService.deleteEvent(this.props.user.id, this.props.selectedEventId))
 
         if (r.status === 200) {
-            //alert(`The event "${r.title}" was successfully created!`)
             console.warn("The event succesfully deleted.")
         }
         else {
